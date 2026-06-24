@@ -2,153 +2,233 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <h2>Citizens Management</h2>
+        <h2>Citizens Management</h2>
 
-    <div>
+        <div>
 
-        <a href="{{ route('generator') }}"
-            class="btn btn-success">
+            <a href="{{ route('citizens.export') }}" class="btn btn-dark">
 
-            Generate RUTs
+                Export CSV
 
-        </a>
+            </a>
 
-        <a href="{{ route('citizens.create') }}"
-            class="btn btn-primary">
+            <a href="{{ route('generator') }}" class="btn btn-success">
 
-            Add Citizen
+                Generate RUTs
 
-        </a>
+            </a>
+
+            <a href="{{ route('citizens.create') }}" class="btn btn-primary">
+
+                Add Citizen
+
+            </a>
+
+        </div>
 
     </div>
 
-</div>
+    <div class="row mb-4">
 
-<div class="card mb-4">
+        <div class="col-md-4">
 
-    <div class="card-body">
+            <div class="card bg-primary text-white">
 
-        <form action="{{ route('search.rut') }}"
-            method="POST">
+                <div class="card-body">
 
-            @csrf
+                    <h3>{{ $totalCitizens }}</h3>
 
-            <div class="row">
-
-                <div class="col-md-10">
-
-                    <input type="text"
-                        name="rut"
-                        class="form-control"
-                        placeholder="Search By RUT"
-                        value="{{ old('rut') }}"
-                        required>
-
-                </div>
-
-                <div class="col-md-2">
-
-                    <button class="btn btn-primary w-100">
-
-                        Search
-
-                    </button>
+                    <p class="mb-0">
+                        Total Citizens
+                    </p>
 
                 </div>
 
             </div>
 
-        </form>
+        </div>
 
     </div>
 
-</div>
+    <!-- Search Name / Email -->
 
-<table class="table table-bordered table-striped">
+    <div class="card mb-3">
 
-    <thead class="table-dark">
+        <div class="card-body">
 
-        <tr>
+            <form action="{{ route('citizens.search') }}" method="GET">
 
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>RUT</th>
-            <th width="220">Action</th>
+                <div class="row">
 
-        </tr>
+                    <div class="col-md-10">
 
-    </thead>
+                        <input type="text" name="search" class="form-control" placeholder="Search Name or Email"
+                            value="{{ request('search') }}">
 
-    <tbody>
+                    </div>
 
-        @forelse($citizens as $citizen)
+                    <div class="col-md-2">
 
-        <tr>
+                        <button class="btn btn-success w-100">
 
-            <td>{{ $citizen->id }}</td>
+                            Search
 
-            <td>{{ $citizen->name }}</td>
+                        </button>
 
-            <td>{{ $citizen->email }}</td>
+                    </div>
 
-            <td>{{ $citizen->rut }}</td>
+                </div>
 
-            <td>
+            </form>
 
-                <a href="{{ route('citizens.show',$citizen->id) }}"
-                    class="btn btn-info btn-sm">
+        </div>
 
-                    View
+    </div>
 
-                </a>
+    <!-- Search RUT -->
 
-                <a href="{{ route('citizens.edit',$citizen->id) }}"
-                    class="btn btn-warning btn-sm">
+    <div class="card mb-4">
 
-                    Edit
+        <div class="card-body">
 
-                </a>
+            <form action="{{ route('search.rut') }}" method="POST">
 
-                <form action="{{ route('citizens.destroy',$citizen->id) }}"
-                    method="POST"
-                    class="d-inline">
+                @csrf
 
-                    @csrf
-                    @method('DELETE')
+                <div class="row">
 
-                    <button class="btn btn-danger btn-sm"
-                        onclick="return confirm('Delete this record?')">
+                    <div class="col-md-10">
 
-                        Delete
+                        <input type="text" name="rut" class="form-control" placeholder="Search By RUT"
+                            value="{{ old('rut') }}" required>
 
-                    </button>
+                    </div>
 
-                </form>
+                    <div class="col-md-2">
 
-            </td>
+                        <button class="btn btn-primary w-100">
 
-        </tr>
+                            Search RUT
 
-        @empty
+                        </button>
 
-        <tr>
+                    </div>
 
-            <td colspan="5"
-                class="text-center">
+                </div>
 
-                No Records Found
+            </form>
 
-            </td>
+        </div>
 
-        </tr>
+    </div>
 
-        @endforelse
+    <table class="table table-bordered table-striped">
 
-    </tbody>
+        <thead class="table-dark">
 
-</table>
+            <tr>
+
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>RUT</th>
+                <th width="220">Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @forelse($citizens as $citizen)
+
+                <tr>
+
+                    <td>{{ $citizen->id }}</td>
+
+                    <td>{{ $citizen->name }}</td>
+
+                    <td>{{ $citizen->email }}</td>
+
+                    <td>{{ $citizen->rut }}</td>
+
+                    <td>
+
+                        <a href="{{ route('citizens.show', $citizen->id) }}" class="btn btn-info btn-sm">
+
+                            View
+
+                        </a>
+
+                        <a href="{{ route('citizens.edit', $citizen->id) }}" class="btn btn-warning btn-sm">
+
+                            Edit
+
+                        </a>
+
+                        <form action="{{ route('citizens.destroy', $citizen->id) }}" method="POST" class="d-inline">
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this record?')">
+
+                                Delete
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+            @empty
+
+                <tr>
+
+                    <td colspan="5" class="text-center">
+
+                        No Records Found
+
+                    </td>
+
+                </tr>
+
+            @endforelse
+
+        </tbody>
+
+    </table>
+
+    <div class="mt-3">
+
+        @if ($citizens->lastPage() > 1)
+
+            <nav>
+                <ul class="pagination justify-content-center">
+
+                    @for ($i = 1; $i <= $citizens->lastPage(); $i++)
+
+                        <li class="page-item {{ $citizens->currentPage() == $i ? 'active' : '' }}">
+
+                            <a class="page-link" href="{{ $citizens->url($i) }}">
+
+                                {{ $i }}
+
+                            </a>
+
+                        </li>
+
+                    @endfor
+
+                </ul>
+            </nav>
+
+        @endif
+
+    </div>
 
 @endsection
