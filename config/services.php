@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'ai_parser' => [
+        'provider' => env('AI_PARSER_PROVIDER', 'openai'),
+        'api_key' => env('AI_PARSER_API_KEY', ''),
+    ],
+
 ];

@@ -6,69 +6,41 @@
 
     <h2>Generated RUTs</h2>
 
-    <a href="{{ route('citizens.index') }}"
-        class="btn btn-secondary">
-
-        Back
-
-    </a>
+    <a href="{{ route('citizens.index') }}" class="btn btn-secondary">Back</a>
 
 </div>
 
-<div class="card">
+<div class="row">
+    @foreach($ruts as $index => $rut)
 
-    <div class="card-body">
+        <div class="col-md-3 mb-4">
 
-        <table class="table table-bordered">
+            <div class="card text-center h-100">
 
-            <thead class="table-dark">
+                <div class="card-body d-flex flex-column align-items-center">
 
-                <tr>
+                    {!! QrCode::size(120)->generate((string)$rut) !!}
 
-                    <th>#</th>
-                    <th>Generated RUT</th>
-                    <th>Type</th>
+                    <h6 class="mt-2 mb-1">{{ $rut }}</h6>
 
-                </tr>
+                    <span class="badge bg-primary">
 
-            </thead>
-
-            <tbody>
-
-                @foreach($ruts as $index => $rut)
-
-                <tr>
-
-                    <td>{{ $index + 1 }}</td>
-
-                    <td>{{ $rut }}</td>
-
-                    <td>
-
-                        @if($rut->isPerson())
-                        Person
-                        @elseif($rut->isCompany())
-                        Company
-                        @elseif($rut->isTemporal())
-                        Temporal
-                        @elseif($rut->isInvestor())
-                        Investor
-                        @else
-                        Other
+                        @if($rut->isPerson()) Person
+                        @elseif($rut->isCompany()) Company
+                        @elseif($rut->isTemporal()) Temporal
+                        @elseif($rut->isInvestor()) Investor
+                        @else Other
                         @endif
 
-                    </td>
+                    </span>
 
-                </tr>
+                </div>
 
-                @endforeach
+            </div>
 
-            </tbody>
+        </div>
 
-        </table>
-
-    </div>
-
+    @endforeach
 </div>
 
 @endsection
